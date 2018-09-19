@@ -569,7 +569,7 @@ static int execute_limit_bid_order(bool real, market_t *m, order_t *taker)
 
 int market_put_limit_order(bool real, json_t **result, market_t *m, uint32_t user_id, uint32_t side, mpd_t *amount, mpd_t *price, mpd_t *taker_fee, mpd_t *maker_fee, const char *source)
 {
-    if (side == MARKET_ORDER_SIDE_ASK) {
+/*     if (side == MARKET_ORDER_SIDE_ASK) {
         mpd_t *balance = balance_get(user_id, BALANCE_TYPE_AVAILABLE, m->stock);
         if (!balance || mpd_cmp(balance, amount, &mpd_ctx) < 0) {
             return -1;
@@ -583,7 +583,7 @@ int market_put_limit_order(bool real, json_t **result, market_t *m, uint32_t use
             return -1;
         }
         mpd_del(require);
-    }
+    } */
 
     if (mpd_cmp(amount, m->min_amount, &mpd_ctx) < 0) {
         return -2;
@@ -874,10 +874,10 @@ static int execute_market_bid_order(bool real, market_t *m, order_t *taker)
 int market_put_market_order(bool real, json_t **result, market_t *m, uint32_t user_id, uint32_t side, mpd_t *amount, mpd_t *taker_fee, const char *source)
 {
     if (side == MARKET_ORDER_SIDE_ASK) {
-        mpd_t *balance = balance_get(user_id, BALANCE_TYPE_AVAILABLE, m->stock);
+/*         mpd_t *balance = balance_get(user_id, BALANCE_TYPE_AVAILABLE, m->stock);
         if (!balance || mpd_cmp(balance, amount, &mpd_ctx) < 0) {
             return -1;
-        }
+        } */
 
         skiplist_iter *iter = skiplist_get_iterator(m->bids);
         skiplist_node *node = skiplist_next(iter);
@@ -891,10 +891,10 @@ int market_put_market_order(bool real, json_t **result, market_t *m, uint32_t us
             return -2;
         }
     } else {
-        mpd_t *balance = balance_get(user_id, BALANCE_TYPE_AVAILABLE, m->money);
+/*         mpd_t *balance = balance_get(user_id, BALANCE_TYPE_AVAILABLE, m->money);
         if (!balance || mpd_cmp(balance, amount, &mpd_ctx) < 0) {
             return -1;
-        }
+        } */
 
         skiplist_iter *iter = skiplist_get_iterator(m->asks);
         skiplist_node *node = skiplist_next(iter);
