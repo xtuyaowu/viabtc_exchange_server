@@ -16,7 +16,7 @@
 # define MARKET_ROLE_MAKER          1
 # define MARKET_ROLE_TAKER          2
 
-# define HISTORY_HASH_NUM           100
+# define HISTORY_HASH_NUM           10
 
 # endif
 
