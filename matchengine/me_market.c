@@ -382,6 +382,10 @@ static int execute_limit_ask_order(bool real, market_t *m, order_t *taker)
             break;
         }
 
+        if (taker.user_type == 1 && maker.user_type == 1){
+            continue;
+        }
+        
         mpd_copy(price, maker->price, &mpd_ctx);
         if (mpd_cmp(taker->left, maker->left, &mpd_ctx) < 0) {
             mpd_copy(amount, taker->left, &mpd_ctx);
@@ -485,6 +489,10 @@ static int execute_limit_bid_order(bool real, market_t *m, order_t *taker)
             break;
         }
 
+        if (taker.user_type == 1 && maker.user_type == 1){
+            continue;
+        }
+
         mpd_copy(price, maker->price, &mpd_ctx);
         if (mpd_cmp(taker->left, maker->left, &mpd_ctx) < 0) {
             mpd_copy(amount, taker->left, &mpd_ctx);
@@ -567,7 +575,7 @@ static int execute_limit_bid_order(bool real, market_t *m, order_t *taker)
     return 0;
 }
 
-int market_put_limit_order(bool real, json_t **result, market_t *m, uint32_t user_id, uint32_t side, mpd_t *amount, mpd_t *price, mpd_t *taker_fee, mpd_t *maker_fee, const char *source)
+int market_put_limit_order(bool real, json_t **result, market_t *m, uint32_t user_id, uint32_t side, mpd_t *amount, mpd_t *price, mpd_t *taker_fee, mpd_t *maker_fee, const char *source, uint32_t user_type)
 {
 /*     if (side == MARKET_ORDER_SIDE_ASK) {
         mpd_t *balance = balance_get(user_id, BALANCE_TYPE_AVAILABLE, m->stock);
@@ -622,6 +630,8 @@ int market_put_limit_order(bool real, json_t **result, market_t *m, uint32_t use
     mpd_copy(order->deal_money, mpd_zero, &mpd_ctx);
     mpd_copy(order->deal_fee, mpd_zero, &mpd_ctx);
 
+    order->user_type      = user_type;
+
     int ret;
     if (side == MARKET_ORDER_SIDE_ASK) {
         ret = execute_limit_ask_order(real, m, order);
@@ -675,6 +685,11 @@ static int execute_market_ask_order(bool real, market_t *m, order_t *taker)
         }
 
         order_t *maker = node->value;
+
+        if (taker.user_type == 1 && maker.user_type == 1){
+            continue;
+        }
+
         mpd_copy(price, maker->price, &mpd_ctx);
         if (mpd_cmp(taker->left, maker->left, &mpd_ctx) < 0) {
             mpd_copy(amount, taker->left, &mpd_ctx);
@@ -774,6 +789,11 @@ static int execute_market_bid_order(bool real, market_t *m, order_t *taker)
         }
 
         order_t *maker = node->value;
+
+        if (taker.user_type == 1 && maker.user_type == 1){
+            continue;
+        }
+
         mpd_copy(price, maker->price, &mpd_ctx);
 
         mpd_div(amount, taker->left, price, &mpd_ctx);
@@ -871,7 +891,7 @@ static int execute_market_bid_order(bool real, market_t *m, order_t *taker)
     return 0;
 }
 
-int market_put_market_order(bool real, json_t **result, market_t *m, uint32_t user_id, uint32_t side, mpd_t *amount, mpd_t *taker_fee, const char *source)
+int market_put_market_order(bool real, json_t **result, market_t *m, uint32_t user_id, uint32_t side, mpd_t *amount, mpd_t *taker_fee, const char *source, uint32_t user_type)
 {
     if (side == MARKET_ORDER_SIDE_ASK) {
 /*         mpd_t *balance = balance_get(user_id, BALANCE_TYPE_AVAILABLE, m->stock);
@@ -946,6 +966,8 @@ int market_put_market_order(bool real, json_t **result, market_t *m, uint32_t us
     mpd_copy(order->deal_stock, mpd_zero, &mpd_ctx);
     mpd_copy(order->deal_money, mpd_zero, &mpd_ctx);
     mpd_copy(order->deal_fee, mpd_zero, &mpd_ctx);
+
+    order->user_type      = user_type;
 
     int ret;
     if (side == MARKET_ORDER_SIDE_ASK) {

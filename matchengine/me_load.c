@@ -238,6 +238,11 @@ static int load_limit_order(json_t *params)
     if (strlen(source) > SOURCE_MAX_LEN)
         goto error;
 
+    // user_type
+    if (!json_is_integer(json_array_get(params, 8)))
+        return -__LINE__;
+    uint32_t user_type = json_integer_value(json_array_get(params, 8));
+
     int ret = market_put_limit_order(false, NULL, market, user_id, side, amount, price, taker_fee, maker_fee, source);
 
     mpd_del(amount);
@@ -312,6 +317,11 @@ static int load_market_order(json_t *params)
     const char *source = json_string_value(json_array_get(params, 5));
     if (strlen(source) > SOURCE_MAX_LEN)
         goto error;
+
+    // user_type
+    if (!json_is_integer(json_array_get(params, 6)))
+        return -__LINE__;
+    uint32_t user_type = json_integer_value(json_array_get(params, 6));
 
     int ret = market_put_market_order(false, NULL, market, user_id, side, amount, taker_fee, source);
 

@@ -18,6 +18,7 @@ typedef struct order_t {
     double          create_time;
     double          update_time;
     uint32_t        user_id;
+    uint32_t        user_type;
     char            *market;
     char            *source;
     mpd_t           *price;
@@ -51,8 +52,8 @@ typedef struct market_t {
 market_t *market_create(struct market *conf);
 int market_get_status(market_t *m, size_t *ask_count, mpd_t *ask_amount, size_t *bid_count, mpd_t *bid_amount);
 
-int market_put_limit_order(bool real, json_t **result, market_t *m, uint32_t user_id, uint32_t side, mpd_t *amount, mpd_t *price, mpd_t *taker_fee, mpd_t *maker_fee, const char *source);
-int market_put_market_order(bool real, json_t **result, market_t *m, uint32_t user_id, uint32_t side, mpd_t *amount, mpd_t *taker_fee, const char *source);
+int market_put_limit_order(bool real, json_t **result, market_t *m, uint32_t user_id, uint32_t side, mpd_t *amount, mpd_t *price, mpd_t *taker_fee, mpd_t *maker_fee, const char *source, uint32_t user_type);
+int market_put_market_order(bool real, json_t **result, market_t *m, uint32_t user_id, uint32_t side, mpd_t *amount, mpd_t *taker_fee, const char *source, uint32_t user_type);
 int market_cancel_order(bool real, json_t **result, market_t *m, order_t *order);
 
 int market_put_order(market_t *m, order_t *order);
