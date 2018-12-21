@@ -382,7 +382,7 @@ static int execute_limit_ask_order(bool real, market_t *m, order_t *taker)
             break;
         }
 
-        if (taker.user_type == 1 && maker.user_type == 1){
+        if (taker->user_type == 1 && maker->user_type == 1){
             continue;
         }
         
@@ -489,7 +489,7 @@ static int execute_limit_bid_order(bool real, market_t *m, order_t *taker)
             break;
         }
 
-        if (taker.user_type == 1 && maker.user_type == 1){
+        if (taker->user_type == 1 && maker->user_type == 1){
             continue;
         }
 
@@ -686,7 +686,7 @@ static int execute_market_ask_order(bool real, market_t *m, order_t *taker)
 
         order_t *maker = node->value;
 
-        if (taker.user_type == 1 && maker.user_type == 1){
+        if (taker->user_type == 1 && maker->user_type == 1){
             continue;
         }
 
@@ -790,7 +790,7 @@ static int execute_market_bid_order(bool real, market_t *m, order_t *taker)
 
         order_t *maker = node->value;
 
-        if (taker.user_type == 1 && maker.user_type == 1){
+        if (taker->user_type == 1 && maker->user_type == 1){
             continue;
         }
 

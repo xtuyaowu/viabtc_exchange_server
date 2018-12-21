@@ -243,7 +243,7 @@ static int load_limit_order(json_t *params)
         return -__LINE__;
     uint32_t user_type = json_integer_value(json_array_get(params, 8));
 
-    int ret = market_put_limit_order(false, NULL, market, user_id, side, amount, price, taker_fee, maker_fee, source);
+    int ret = market_put_limit_order(false, NULL, market, user_id, side, amount, price, taker_fee, maker_fee, source, user_type);
 
     mpd_del(amount);
     mpd_del(price);
@@ -323,7 +323,7 @@ static int load_market_order(json_t *params)
         return -__LINE__;
     uint32_t user_type = json_integer_value(json_array_get(params, 6));
 
-    int ret = market_put_market_order(false, NULL, market, user_id, side, amount, taker_fee, source);
+    int ret = market_put_market_order(false, NULL, market, user_id, side, amount, taker_fee, source, user_type);
 
     mpd_del(amount);
     mpd_del(taker_fee);

@@ -420,8 +420,13 @@ static int on_cmd_order_put_limit(nw_ses *ses, rpc_pkg *pkg, json_t *params)
     if (strlen(source) >= SOURCE_MAX_LEN)
         goto invalid_argument;
 
+    // user_type
+    if (!json_is_integer(json_array_get(params, 8)))
+        return reply_error_invalid_argument(ses, pkg);
+    uint32_t user_type = json_integer_value(json_array_get(params, 8));
+
     json_t *result = NULL;
-    int ret = market_put_limit_order(true, &result, market, user_id, side, amount, price, taker_fee, maker_fee, source);
+    int ret = market_put_limit_order(true, &result, market, user_id, side, amount, price, taker_fee, maker_fee, source, user_type);
 
     mpd_del(amount);
     mpd_del(price);
@@ -504,8 +509,13 @@ static int on_cmd_order_put_market(nw_ses *ses, rpc_pkg *pkg, json_t *params)
     if (strlen(source) >= SOURCE_MAX_LEN)
         goto invalid_argument;
 
+    // user_type
+    if (!json_is_integer(json_array_get(params, 6)))
+        return reply_error_invalid_argument(ses, pkg);
+    uint32_t user_type = json_integer_value(json_array_get(params, 6));
+
     json_t *result = NULL;
-    int ret = market_put_market_order(true, &result, market, user_id, side, amount, taker_fee, source);
+    int ret = market_put_market_order(true, &result, market, user_id, side, amount, taker_fee, source, user_type);
 
     mpd_del(amount);
     mpd_del(taker_fee);
