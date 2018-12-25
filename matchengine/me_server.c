@@ -357,7 +357,7 @@ invalid_argument:
 
 static int on_cmd_order_put_limit(nw_ses *ses, rpc_pkg *pkg, json_t *params)
 {
-    if (json_array_size(params) != 8)
+    if (json_array_size(params) != 9)
         return reply_error_invalid_argument(ses, pkg);
 
     // user_id
@@ -462,7 +462,7 @@ invalid_argument:
 
 static int on_cmd_order_put_market(nw_ses *ses, rpc_pkg *pkg, json_t *params)
 {
-    if (json_array_size(params) != 6)
+    if (json_array_size(params) != 7)
         return reply_error_invalid_argument(ses, pkg);
 
     // user_id

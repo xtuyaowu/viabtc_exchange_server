@@ -167,7 +167,7 @@ static int load_update_balance(json_t *params)
 
 static int load_limit_order(json_t *params)
 {
-    if (json_array_size(params) != 8)
+    if (json_array_size(params) != 9)
         return -__LINE__;
 
     // user_id
@@ -267,7 +267,7 @@ error:
 
 static int load_market_order(json_t *params)
 {
-    if (json_array_size(params) != 6)
+    if (json_array_size(params) != 7)
         return -__LINE__;
 
     // user_id
