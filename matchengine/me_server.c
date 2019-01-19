@@ -610,7 +610,7 @@ static int on_cmd_order_query(nw_ses *ses, rpc_pkg *pkg, json_t *params)
 
 static int on_cmd_order_cancel(nw_ses *ses, rpc_pkg *pkg, json_t *params)
 {
-    if (json_array_size(params) != 4)
+    if (json_array_size(params) != 3)
         return reply_error_invalid_argument(ses, pkg);
 
     // user_id
@@ -639,14 +639,14 @@ static int on_cmd_order_cancel(nw_ses *ses, rpc_pkg *pkg, json_t *params)
     //    return reply_error(ses, pkg, 11, "user not match");
     //}
 
-    // user_type
-    if (!json_is_integer(json_array_get(params, 3)))
+    // order_id
+    if (!json_is_integer(json_array_get(params, 2)))
         return reply_error_invalid_argument(ses, pkg);
-    uint32_t user_type = json_integer_value(json_array_get(params, 3));
+    uint64_t order_id = json_integer_value(json_array_get(params, 2));
 
     json_t *result = NULL;
 
-    if (user_type ==1){
+    if (order_id ==0 ){
         skiplist_t *order_list = market_get_order_list(market, user_id);
         if (order_list == NULL) {
             json_object_set_new(result, "total", json_integer(0));
@@ -667,10 +667,6 @@ static int on_cmd_order_cancel(nw_ses *ses, rpc_pkg *pkg, json_t *params)
             skiplist_release_iterator(iter);
         }
     } else {
-        // order_id
-        if (!json_is_integer(json_array_get(params, 2)))
-            return reply_error_invalid_argument(ses, pkg);
-        uint64_t order_id = json_integer_value(json_array_get(params, 2));
 
         order_t *order = market_get_order(market, order_id);
         if (order == NULL) {
