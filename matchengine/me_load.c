@@ -363,7 +363,7 @@ static int load_cancel_order(json_t *params)
     uint64_t order_id = json_integer_value(json_array_get(params, 2));
 
     order_t *order = market_get_order(market, order_id);
-    if (order == NULL) {
+    if (order == NULL && order_id !=0 ) {
         return -__LINE__;
     }
 
