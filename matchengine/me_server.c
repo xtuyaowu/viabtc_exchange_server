@@ -646,12 +646,12 @@ static int on_cmd_order_cancel(nw_ses *ses, rpc_pkg *pkg, json_t *params)
 
     json_t *result = NULL;
 
-    if (order_id ==0 ){
+    if (order_id == 0 ){
         skiplist_t *order_list = market_get_order_list(market, user_id);
         if (order_list == NULL) {
-            json_object_set_new(result, "total", json_integer(0));
+            return reply_result(ses, pkg, result);
         } else {
-            json_object_set_new(result, "total", json_integer(order_list->len));
+            //json_object_set_new(result, "total", json_integer(order_list->len));
             skiplist_iter *iter = skiplist_get_iterator(order_list);
             skiplist_node *node;
             size_t index = 0;
