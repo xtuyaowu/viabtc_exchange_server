@@ -627,6 +627,65 @@ static int on_cmd_order_cancel(nw_ses *ses, rpc_pkg *pkg, json_t *params)
         return reply_error_invalid_argument(ses, pkg);
 
     // order_id
+    //if (!json_is_integer(json_array_get(params, 2)))
+    //    return reply_error_invalid_argument(ses, pkg);
+    //uint64_t order_id = json_integer_value(json_array_get(params, 2));
+
+    //order_t *order = market_get_order(market, order_id);
+    //if (order == NULL) {
+    //    return reply_error(ses, pkg, 10, "order not found");
+    //}
+    //if (order->user_id != user_id) {
+    //    return reply_error(ses, pkg, 11, "user not match");
+    //}
+
+    json_t *result = NULL;
+
+    skiplist_t *order_list = market_get_order_list(market, user_id);
+    if (order_list == NULL) {
+        json_object_set_new(result, "total", json_integer(0));
+    } else {
+        json_object_set_new(result, "total", json_integer(order_list->len));
+        skiplist_iter *iter = skiplist_get_iterator(order_list);
+        skiplist_node *node;
+        size_t index = 0;
+        while ((node = skiplist_next(iter)) != NULL) {
+            index++;
+            order_t *order = node->value;
+            int ret = market_cancel_order(true, &result, market, order);
+            if (ret < 0) {
+                log_fatal("cancel order: %"PRIu64" fail: %d", order->id, ret);
+                return reply_error_internal_error(ses, pkg);
+            }
+        }
+        skiplist_release_iterator(iter);
+    }
+
+    append_operlog("cancel_order", params);
+    int ret = reply_result(ses, pkg, result);
+    json_decref(result);
+    return ret;
+}
+
+static int on_cmd_order_cancel_backup(nw_ses *ses, rpc_pkg *pkg, json_t *params)
+{
+    if (json_array_size(params) != 3)
+        return reply_error_invalid_argument(ses, pkg);
+
+    // user_id
+    if (!json_is_integer(json_array_get(params, 0)))
+        return reply_error_invalid_argument(ses, pkg);
+    uint32_t user_id = json_integer_value(json_array_get(params, 0));
+
+    // market
+    if (!json_is_string(json_array_get(params, 1)))
+        return reply_error_invalid_argument(ses, pkg);
+    const char *market_name = json_string_value(json_array_get(params, 1));
+    market_t *market = get_market(market_name);
+    if (market == NULL)
+        return reply_error_invalid_argument(ses, pkg);
+
+    // order_id
     if (!json_is_integer(json_array_get(params, 2)))
         return reply_error_invalid_argument(ses, pkg);
     uint64_t order_id = json_integer_value(json_array_get(params, 2));
