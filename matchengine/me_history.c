@@ -177,6 +177,8 @@ static void set_sql(struct dict_sql_key *key, sds sql)
 
 static int append_user_order(order_t *order)
 {
+    return 0;
+
     struct dict_sql_key key;
     key.hash = order->user_id % HISTORY_HASH_NUM;
     key.type = HISTORY_USER_ORDER;
@@ -209,6 +211,8 @@ static int append_user_order(order_t *order)
 
 static int append_order_detail(order_t *order)
 {
+    return 0;
+
     struct dict_sql_key key;
     key.hash = order->id % HISTORY_HASH_NUM;
     key.type = HISTORY_ORDER_DETAIL;
@@ -241,6 +245,8 @@ static int append_order_detail(order_t *order)
 
 static int append_order_deal(double t, uint32_t user_id, uint64_t deal_id, uint64_t order_id, uint64_t deal_order_id, int role, mpd_t *price, mpd_t *amount, mpd_t *deal, mpd_t *fee, mpd_t *deal_fee)
 {
+    return 0;
+
     struct dict_sql_key key;
     key.hash = order_id % HISTORY_HASH_NUM;
     key.type = HISTORY_ORDER_DEAL;
@@ -269,6 +275,8 @@ static int append_order_deal(double t, uint32_t user_id, uint64_t deal_id, uint6
 
 static int append_user_deal(double t, uint32_t user_id, const char *market, uint64_t deal_id, uint64_t order_id, uint64_t deal_order_id, int side, int role, mpd_t *price, mpd_t *amount, mpd_t *deal, mpd_t *fee, mpd_t *deal_fee)
 {
+    return 0;
+
     struct dict_sql_key key;
     key.hash = user_id % HISTORY_HASH_NUM;
     key.type = HISTORY_USER_DEAL;
@@ -297,6 +305,8 @@ static int append_user_deal(double t, uint32_t user_id, const char *market, uint
 
 static int append_user_balance(double t, uint32_t user_id, const char *asset, const char *business, mpd_t *change, mpd_t *balance, const char *detail)
 {
+    return 0;
+
     struct dict_sql_key key;
     key.hash = user_id % HISTORY_HASH_NUM;
     key.type = HISTORY_USER_BALANCE;
@@ -324,6 +334,8 @@ static int append_user_balance(double t, uint32_t user_id, const char *asset, co
 
 int append_order_history(order_t *order)
 {
+    return 0;
+
     append_user_order(order);
     append_order_detail(order);
 
@@ -332,6 +344,8 @@ int append_order_history(order_t *order)
 
 int append_order_deal_history(double t, uint64_t deal_id, order_t *ask, int ask_role, order_t *bid, int bid_role, mpd_t *price, mpd_t *amount, mpd_t *deal, mpd_t *ask_fee, mpd_t *bid_fee)
 {
+    return 0;
+
     append_order_deal(t, ask->user_id, deal_id, ask->id, bid->id, ask_role, price, amount, deal, ask_fee, bid_fee);
     append_order_deal(t, bid->user_id, deal_id, bid->id, ask->id, bid_role, price, amount, deal, bid_fee, ask_fee);
 
@@ -343,6 +357,8 @@ int append_order_deal_history(double t, uint64_t deal_id, order_t *ask, int ask_
 
 int append_user_balance_history(double t, uint32_t user_id, const char *asset, const char *business, mpd_t *change, const char *detail)
 {
+    return 0;
+    
     mpd_t *balance = balance_total(user_id, asset);
     append_user_balance(t, user_id, asset, business, change, balance, detail);
     mpd_del(balance);

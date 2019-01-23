@@ -151,6 +151,8 @@ int fini_operlog(void)
 
 int append_operlog(const char *method, json_t *params)
 {
+    return 0;
+    
     json_t *detail = json_object();
     json_object_set_new(detail, "method", json_string(method));
     json_object_set(detail, "params", params);
