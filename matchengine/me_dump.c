@@ -21,6 +21,8 @@ static sds sql_append_mpd(sds sql, mpd_t *val, bool comma)
 
 static int dump_orders_list(MYSQL *conn, const char *table, skiplist_t *list)
 {
+    return 0;
+
     sds sql = sdsempty();
 
     size_t insert_limit = 1000;
@@ -125,6 +127,8 @@ int dump_orders(MYSQL *conn, const char *table)
 
 static int dump_balance_dict(MYSQL *conn, const char *table, dict_t *dict)
 {
+    return 0;
+    
     sds sql = sdsempty();
 
     size_t insert_limit = 1000;
