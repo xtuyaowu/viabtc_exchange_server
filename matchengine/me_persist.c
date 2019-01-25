@@ -27,6 +27,8 @@ static time_t get_today_start(void)
 
 static int get_last_slice(MYSQL *conn, time_t *timestamp, uint64_t *last_oper_id, uint64_t *last_order_id, uint64_t *last_deals_id)
 {
+    return 0;
+
     sds sql = sdsempty();
     sql = sdscatprintf(sql, "SELECT `time`, `end_oper_id`, `end_order_id`, `end_deals_id` from `slice_history` ORDER BY `id` DESC LIMIT 1");
     log_stderr("get last slice time");
@@ -204,6 +206,8 @@ static int dump_balance_to_db(MYSQL *conn, time_t end)
 
 int update_slice_history(MYSQL *conn, time_t end)
 {
+    return 0;
+
     sds sql = sdsempty();
     sql = sdscatprintf(sql, "INSERT INTO `slice_history` (`id`, `time`, `end_oper_id`, `end_order_id`, `end_deals_id`) VALUES (NULL, %ld, %"PRIu64", %"PRIu64", %"PRIu64")",
             end, operlog_id_start, order_id_start, deals_id_start);
@@ -258,6 +262,8 @@ cleanup:
 
 static int slice_count(MYSQL *conn, time_t timestamp)
 {
+    return 0;
+
     sds sql = sdsempty();
     sql = sdscatprintf(sql, "SELECT COUNT(*) FROM `slice_history` WHERE `time` >= %ld", timestamp - settings.slice_keeptime);
     log_trace("exec sql: %s", sql);
@@ -323,6 +329,8 @@ static int delete_slice(MYSQL *conn, uint64_t id, time_t timestamp)
 
 int clear_slice(time_t timestamp)
 {
+    return 0;
+    
     MYSQL *conn = mysql_connect(&settings.db_log);
     if (conn == NULL) {
         log_error("connect mysql fail");
