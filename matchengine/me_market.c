@@ -370,6 +370,9 @@ static int execute_limit_ask_order(bool real, market_t *m, order_t *taker)
     mpd_t *bid_fee  = mpd_new(&mpd_ctx);
     mpd_t *result   = mpd_new(&mpd_ctx);
 
+    mpd_t *binance_min_deal    = NULL;
+    binance_min_deal = decimal("0.001", 3);
+    
     skiplist_node *node;
     skiplist_iter *iter = skiplist_get_iterator(m->bids);
     while ((node = skiplist_next(iter)) != NULL) {
@@ -391,6 +394,10 @@ static int execute_limit_ask_order(bool real, market_t *m, order_t *taker)
             mpd_copy(amount, taker->left, &mpd_ctx);
         } else {
             mpd_copy(amount, maker->left, &mpd_ctx);
+        }
+
+        if(strcmp(m->name,"ETHBTC") !=0 && maker->user_id == 300 && mpd_cmp(deal, binance_min_deal, &mpd_ctx) <= 0){
+            continue;
         }
 
         mpd_mul(deal, price, amount, &mpd_ctx);
@@ -465,6 +472,8 @@ static int execute_limit_ask_order(bool real, market_t *m, order_t *taker)
     mpd_del(bid_fee);
     mpd_del(result);
 
+    mpd_del(binance_min_deal);
+
     return 0;
 }
 
@@ -476,6 +485,9 @@ static int execute_limit_bid_order(bool real, market_t *m, order_t *taker)
     mpd_t *ask_fee  = mpd_new(&mpd_ctx);
     mpd_t *bid_fee  = mpd_new(&mpd_ctx);
     mpd_t *result   = mpd_new(&mpd_ctx);
+
+    mpd_t *binance_min_deal    = NULL;
+    binance_min_deal = decimal("0.001", 3);
 
     skiplist_node *node;
     skiplist_iter *iter = skiplist_get_iterator(m->asks);
@@ -500,6 +512,10 @@ static int execute_limit_bid_order(bool real, market_t *m, order_t *taker)
             mpd_copy(amount, maker->left, &mpd_ctx);
         }
 
+        if(strcmp(m->name,"ETHBTC") !=0 && maker->user_id == 300 && mpd_cmp(deal, binance_min_deal, &mpd_ctx) <= 0){
+            continue;
+        }
+        
         mpd_mul(deal, price, amount, &mpd_ctx);
         mpd_mul(ask_fee, deal, maker->maker_fee, &mpd_ctx);
         mpd_mul(bid_fee, amount, taker->taker_fee, &mpd_ctx);
@@ -571,6 +587,8 @@ static int execute_limit_bid_order(bool real, market_t *m, order_t *taker)
     mpd_del(ask_fee);
     mpd_del(bid_fee);
     mpd_del(result);
+
+    mpd_del(binance_min_deal);
 
     return 0;
 }
