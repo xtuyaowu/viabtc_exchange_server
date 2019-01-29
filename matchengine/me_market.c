@@ -385,10 +385,12 @@ static int execute_limit_ask_order(bool real, market_t *m, order_t *taker)
             break;
         }
 
-        if (taker->user_type == 1 && maker->user_type == 1){
-            continue;
+        //log_info("before taker user_type: %d maker user_type: %d maker user_id: %d", taker->user_type, maker->user_type,maker->user_id);
+        if (taker->user_type == 1 && (maker->user_id == 100 || maker->user_id == 200 ||maker->user_id == 300 ||maker->user_id == 500)){
+            break;
         }
-        
+        //log_info("after taker user_type: %d maker user_type: %d maker user_id: %d", taker->user_type, maker->user_type,maker->user_id);
+
         mpd_copy(price, maker->price, &mpd_ctx);
         if (mpd_cmp(taker->left, maker->left, &mpd_ctx) < 0) {
             mpd_copy(amount, taker->left, &mpd_ctx);
@@ -397,7 +399,7 @@ static int execute_limit_ask_order(bool real, market_t *m, order_t *taker)
         }
 
         if(strcmp(m->name,"ETHBTC") !=0 && maker->user_id == 300 && mpd_cmp(deal, binance_min_deal, &mpd_ctx) <= 0){
-            continue;
+            break;
         }
 
         mpd_mul(deal, price, amount, &mpd_ctx);
@@ -501,9 +503,12 @@ static int execute_limit_bid_order(bool real, market_t *m, order_t *taker)
             break;
         }
 
-        if (taker->user_type == 1 && maker->user_type == 1){
-            continue;
+        //log_info("before taker user_type: %d maker user_type: %d maker user_id: %d", taker->user_type, maker->user_type,maker->user_id);
+        if (taker->user_type == 1 && (maker->user_id == 100 || maker->user_id == 200 ||maker->user_id == 300 ||maker->user_id == 500)){
+            break;
         }
+        //log_info("after taker user_type: %d maker user_type: %d maker user_id: %d", taker->user_type, maker->user_type,maker->user_id);
+
 
         mpd_copy(price, maker->price, &mpd_ctx);
         if (mpd_cmp(taker->left, maker->left, &mpd_ctx) < 0) {
@@ -513,7 +518,7 @@ static int execute_limit_bid_order(bool real, market_t *m, order_t *taker)
         }
 
         if(strcmp(m->name,"ETHBTC") !=0 && maker->user_id == 300 && mpd_cmp(deal, binance_min_deal, &mpd_ctx) <= 0){
-            continue;
+            break;
         }
         
         mpd_mul(deal, price, amount, &mpd_ctx);
