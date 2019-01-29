@@ -398,7 +398,7 @@ static int execute_limit_ask_order(bool real, market_t *m, order_t *taker)
             mpd_copy(amount, maker->left, &mpd_ctx);
         }
 
-        if(strcmp(m->name,"ETHBTC") !=0 && maker->user_id == 300 && mpd_cmp(deal, binance_min_deal, &mpd_ctx) <= 0){
+        if(strcmp(m->name,"ETHBTC") !=0 && maker->user_id == 300 && mpd_cmp(deal, binance_min_deal, &mpd_ctx) < 0){
             continue;
         }
 
@@ -517,7 +517,7 @@ static int execute_limit_bid_order(bool real, market_t *m, order_t *taker)
             mpd_copy(amount, maker->left, &mpd_ctx);
         }
 
-        if(strcmp(m->name,"ETHBTC") !=0 && maker->user_id == 300 && mpd_cmp(deal, binance_min_deal, &mpd_ctx) <= 0){
+        if(strcmp(m->name,"ETHBTC") !=0 && maker->user_id == 300 && mpd_cmp(deal, binance_min_deal, &mpd_ctx) < 0){
             continue;
         }
         
