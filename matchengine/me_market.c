@@ -398,11 +398,12 @@ static int execute_limit_ask_order(bool real, market_t *m, order_t *taker)
             mpd_copy(amount, maker->left, &mpd_ctx);
         }
 
-        if(strcmp(m->name,"ETHBTC") !=0 && maker->user_id == 300 && mpd_cmp(deal, binance_min_deal, &mpd_ctx) < 0){
+        mpd_mul(deal, price, amount, &mpd_ctx);
+
+        if(strcmp(m->name,"ETHBTC") ==0 && (maker->user_id == 300 || taker->user_id == 300) && mpd_cmp(deal, binance_min_deal, &mpd_ctx) < 0){
             continue;
         }
 
-        mpd_mul(deal, price, amount, &mpd_ctx);
         mpd_mul(ask_fee, deal, taker->taker_fee, &mpd_ctx);
         mpd_mul(bid_fee, amount, maker->maker_fee, &mpd_ctx);
 
@@ -516,12 +517,13 @@ static int execute_limit_bid_order(bool real, market_t *m, order_t *taker)
         } else {
             mpd_copy(amount, maker->left, &mpd_ctx);
         }
-
-        if(strcmp(m->name,"ETHBTC") !=0 && maker->user_id == 300 && mpd_cmp(deal, binance_min_deal, &mpd_ctx) < 0){
-            continue;
-        }
         
         mpd_mul(deal, price, amount, &mpd_ctx);
+
+        if(strcmp(m->name,"ETHBTC") ==0 && (maker->user_id == 300 || taker->user_id == 300) && mpd_cmp(deal, binance_min_deal, &mpd_ctx) < 0){
+            continue;
+        }
+
         mpd_mul(ask_fee, deal, maker->maker_fee, &mpd_ctx);
         mpd_mul(bid_fee, amount, taker->taker_fee, &mpd_ctx);
 
